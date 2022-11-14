@@ -4,6 +4,8 @@ class HomeProvider extends ChangeNotifier {
   bool localServe = true;
   int scoreLeft = 0;
   int scoreRight = 0;
+  int setLeft = 0;
+  int setRight = 0;
 
   bool localTime1Used = false;
   bool localTime2Used = false;
@@ -19,34 +21,32 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setLocalTime1AsUsed() {
-    localTime1Used = true;
+  toggleLocalTime1() {
+    localTime1Used = !localTime1Used;
     notifyListeners();
   }
 
-  setLocalTime2AsUsed() {
-    localTime2Used = true;
+  toggleLocalTime2() {
+    localTime2Used = !localTime2Used;
     notifyListeners();
   }
 
-  setVisitTime1AsUsed() {
-    visitTime1Used = true;
+  toggleVisitTime1() {
+    visitTime1Used = !visitTime1Used;
     notifyListeners();
   }
 
-  setVisitTime2AsUsed() {
-    visitTime2Used = true;
+  toggleVisitTime2() {
+    visitTime2Used = !visitTime2Used;
     notifyListeners();
-  }
-
-  updateListener() {
-    //notifyListeners();
   }
 
   resetValues() {
     localServe = true;
     scoreLeft = 0;
     scoreRight = 0;
+    setLeft = 0;
+    setRight = 0;
     localTime1Used = false;
     localTime2Used = false;
     visitTime1Used = false;

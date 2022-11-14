@@ -26,7 +26,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   TextEditingController? _nameLeftcontroller;
   TextEditingController? _nameRightcontroller;
-  TextEditingController? _setController;
   late HomeProvider homeProvider;
   late Size size;
   bool appLoaded = false;
@@ -45,7 +44,6 @@ class _HomeViewState extends State<HomeView> {
     homeProvider.localServe = true;
     _nameLeftcontroller = TextEditingController(text: '<Local>');
     _nameRightcontroller = TextEditingController(text: '<Visitante>');
-    _setController = TextEditingController(text: '0 - 0');
   }
 
   @override
@@ -95,7 +93,6 @@ class _HomeViewState extends State<HomeView> {
                         file.bytes!,
                         width: size.width * 0.15,
                       );
-                      homeProvider.updateListener();
                     });
                   } else {
                     // User canceled the picker
@@ -111,7 +108,6 @@ class _HomeViewState extends State<HomeView> {
                         file.bytes!,
                         width: size.width * 0.15,
                       );
-                      homeProvider.updateListener();
                     });
                   } else {
                     // User canceled the picker
@@ -237,8 +233,9 @@ class _HomeViewState extends State<HomeView> {
                     GestureDetector(
                       onLongPress: () {
                         setState(() {
-                          --homeProvider.scoreLeft;
-                          homeProvider.updateListener();
+                          if (homeProvider.scoreLeft > 0) {
+                            --homeProvider.scoreLeft;
+                          }
                         });
                       },
                       onTap: () {
@@ -247,7 +244,6 @@ class _HomeViewState extends State<HomeView> {
                           if (!homeProvider.localServe) {
                             homeProvider.toggleServe();
                           }
-                          homeProvider.updateListener();
                         });
                       },
                       child: homeProvider.localEmblem,
@@ -296,8 +292,9 @@ class _HomeViewState extends State<HomeView> {
                     GestureDetector(
                       onLongPress: () {
                         setState(() {
-                          --homeProvider.scoreRight;
-                          homeProvider.updateListener();
+                          if (homeProvider.scoreRight > 0) {
+                            --homeProvider.scoreRight;
+                          }
                         });
                       },
                       onTap: () {
@@ -306,7 +303,6 @@ class _HomeViewState extends State<HomeView> {
                           if (homeProvider.localServe) {
                             homeProvider.toggleServe();
                           }
-                          homeProvider.updateListener();
                         });
                       },
                       child: homeProvider.visitEmblem,
@@ -336,14 +332,21 @@ class _HomeViewState extends State<HomeView> {
                     Row(
                       children: [
                         homeProvider.localTime1Used
-                            ? Icon(
-                                Icons.circle_sharp,
-                                size: size.width * 0.040,
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    homeProvider.toggleLocalTime1();
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.circle_sharp,
+                                  size: size.width * 0.040,
+                                ),
                               )
                             : GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    homeProvider.setLocalTime1AsUsed();
+                                    homeProvider.toggleLocalTime1();
                                   });
                                 },
                                 child: Icon(
@@ -355,14 +358,21 @@ class _HomeViewState extends State<HomeView> {
                           width: 30,
                         ),
                         homeProvider.localTime2Used
-                            ? Icon(
-                                Icons.circle_sharp,
-                                size: size.width * 0.040,
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    homeProvider.toggleLocalTime2();
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.circle_sharp,
+                                  size: size.width * 0.040,
+                                ),
                               )
                             : GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    homeProvider.setLocalTime2AsUsed();
+                                    homeProvider.toggleLocalTime2();
                                   });
                                 },
                                 child: Icon(
@@ -381,16 +391,60 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     Container(
                       width: size.width * 0.2,
-                      child: TextField(
-                          //onChanged: (value) => score = int.parse(value),
-                          textAlign: TextAlign.center,
-                          textAlignVertical: TextAlignVertical.center,
-                          controller: _setController,
-                          style: GoogleFonts.oswald(
-                              fontSize: size.width * 0.07,
-                              color: Colors.black.withOpacity(0.7),
-                              fontWeight: FontWeight.bold),
-                          decoration: CustomInputs.invisibleInput()),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                ++homeProvider.setLeft;
+                              });
+                            },
+                            onLongPress: () {
+                              setState(() {
+                                if (homeProvider.setLeft > 0) {
+                                  --homeProvider.setLeft;
+                                }
+                              });
+                            },
+                            child: Text(
+                              homeProvider.setLeft.toString(),
+                              style: GoogleFonts.oswald(
+                                  fontSize: size.width * 0.09,
+                                  color: Colors.black.withOpacity(0.7),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Text(
+                            " - ",
+                            style: GoogleFonts.oswald(
+                                fontSize: size.width * 0.09,
+                                color: Colors.black.withOpacity(0.7),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                ++homeProvider.setRight;
+                              });
+                            },
+                            onLongPress: () {
+                              setState(() {
+                                if (homeProvider.setRight > 0) {
+                                  --homeProvider.setRight;
+                                }
+                              });
+                            },
+                            child: Text(
+                              homeProvider.setRight.toString(),
+                              style: GoogleFonts.oswald(
+                                  fontSize: size.width * 0.09,
+                                  color: Colors.black.withOpacity(0.7),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -408,14 +462,21 @@ class _HomeViewState extends State<HomeView> {
                     Row(
                       children: [
                         homeProvider.visitTime1Used
-                            ? Icon(
-                                Icons.circle_sharp,
-                                size: size.width * 0.040,
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    homeProvider.toggleVisitTime1();
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.circle_sharp,
+                                  size: size.width * 0.040,
+                                ),
                               )
                             : GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    homeProvider.setVisitTime1AsUsed();
+                                    homeProvider.toggleVisitTime1();
                                   });
                                 },
                                 child: Icon(
@@ -427,14 +488,21 @@ class _HomeViewState extends State<HomeView> {
                           width: 30,
                         ),
                         homeProvider.visitTime2Used
-                            ? Icon(
-                                Icons.circle_sharp,
-                                size: size.width * 0.040,
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    homeProvider.toggleVisitTime2();
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.circle_sharp,
+                                  size: size.width * 0.040,
+                                ),
                               )
                             : GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    homeProvider.setVisitTime2AsUsed();
+                                    homeProvider.toggleVisitTime2();
                                   });
                                 },
                                 child: Icon(
@@ -542,7 +610,6 @@ class _ScoreLeftState extends State<_ScoreLeft> {
                   onTap: () {
                     setState(() {
                       widget.homeProvider.toggleServe();
-                      widget.homeProvider.updateListener();
                       widget.refresh();
                     });
                   },
@@ -601,7 +668,6 @@ class _ScoreRightState extends State<_ScoreRight> {
                   onTap: () {
                     setState(() {
                       widget.homeProvider.toggleServe();
-                      widget.homeProvider.updateListener();
                       widget.refresh();
                     });
                   },
