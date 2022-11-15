@@ -45,12 +45,16 @@ class HomeProvider extends ChangeNotifier {
     localServe = true;
     scoreLeft = 0;
     scoreRight = 0;
-    setLeft = 0;
-    setRight = 0;
     localTime1Used = false;
     localTime2Used = false;
     visitTime1Used = false;
     visitTime2Used = false;
+    notifyListeners();
+  }
+
+  resetSets() {
+    setLeft = 0;
+    setRight = 0;
     notifyListeners();
   }
 }

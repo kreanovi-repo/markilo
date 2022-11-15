@@ -12,7 +12,8 @@ enum Menu {
   normalScreen,
   selectLocalEmblem,
   selectVisitEmblem,
-  resetValues
+  resetGame,
+  resetSets
 }
 
 class HomeView extends StatefulWidget {
@@ -94,8 +95,6 @@ class _HomeViewState extends State<HomeView> {
                         width: size.width * 0.15,
                       );
                     });
-                  } else {
-                    // User canceled the picker
                   }
                 } else if (Menu.selectVisitEmblem == item) {
                   FilePickerResult? result = await FilePicker.platform
@@ -112,8 +111,11 @@ class _HomeViewState extends State<HomeView> {
                   } else {
                     // User canceled the picker
                   }
-                } else if (Menu.resetValues == item) {
+                } else if (Menu.resetGame == item) {
                   homeProvider.resetValues();
+                  refresh();
+                } else if (Menu.resetSets == item) {
+                  homeProvider.resetSets();
                   refresh();
                 }
               },
@@ -191,7 +193,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     PopupMenuItem<Menu>(
-                      value: Menu.resetValues,
+                      value: Menu.resetGame,
                       child: Row(
                         children: [
                           Icon(
@@ -203,6 +205,24 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Text(
                             'Reiniciar juego',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<Menu>(
+                      value: Menu.resetSets,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.restart_alt_outlined,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Reiniciar sets',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
