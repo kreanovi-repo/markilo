@@ -37,7 +37,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     homeProvider.scoreLeft = 0;
@@ -70,7 +69,7 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         toolbarHeight: 30,
         elevation: 0,
-        backgroundColor: Color.fromARGB(255, 0, 173, 239),
+        backgroundColor: const Color.fromARGB(255, 0, 173, 239),
         actions: [
           PopupMenuButton<Menu>(
               // Callback that sets the selected popup menu item.
@@ -120,7 +119,7 @@ class _HomeViewState extends State<HomeView> {
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
-                    PopupMenuItem<Menu>(
+                    const PopupMenuItem<Menu>(
                       value: Menu.fullScreen,
                       child: Row(
                         children: [
@@ -138,7 +137,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     ),
-                    PopupMenuItem<Menu>(
+                    const PopupMenuItem<Menu>(
                       value: Menu.normalScreen,
                       child: Row(
                         children: [
@@ -156,7 +155,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     ),
-                    PopupMenuItem<Menu>(
+                    const PopupMenuItem<Menu>(
                       value: Menu.selectLocalEmblem,
                       child: Row(
                         children: [
@@ -174,7 +173,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     ),
-                    PopupMenuItem<Menu>(
+                    const PopupMenuItem<Menu>(
                       value: Menu.selectVisitEmblem,
                       child: Row(
                         children: [
@@ -192,7 +191,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     ),
-                    PopupMenuItem<Menu>(
+                    const PopupMenuItem<Menu>(
                       value: Menu.resetGame,
                       child: Row(
                         children: [
@@ -210,7 +209,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     ),
-                    PopupMenuItem<Menu>(
+                    const PopupMenuItem<Menu>(
                       value: Menu.resetSets,
                       child: Row(
                         children: [
@@ -235,7 +234,7 @@ class _HomeViewState extends State<HomeView> {
           child: Container(
         width: size.width,
         height: size.height,
-        color: Color.fromARGB(255, 0, 173, 239),
+        color: const Color.fromARGB(255, 0, 173, 239),
         child: Column(
           children: [
             Row(
@@ -270,7 +269,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 _ScoreLeft(
                   size: size,
                   homeProvider: homeProvider,
@@ -283,7 +282,7 @@ class _HomeViewState extends State<HomeView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Text(
@@ -303,7 +302,7 @@ class _HomeViewState extends State<HomeView> {
                   homeProvider: homeProvider,
                   refresh: refresh,
                 ),
-                Spacer(),
+                const Spacer(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -374,7 +373,7 @@ class _HomeViewState extends State<HomeView> {
                                   size: size.width * 0.040,
                                 ),
                               ),
-                        SizedBox(
+                        const SizedBox(
                           width: 30,
                         ),
                         homeProvider.localTime2Used
@@ -404,12 +403,12 @@ class _HomeViewState extends State<HomeView> {
                     )
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                       width: size.width * 0.2,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -468,7 +467,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 Column(
                   children: [
                     Text(
@@ -504,7 +503,7 @@ class _HomeViewState extends State<HomeView> {
                                   size: size.width * 0.040,
                                 ),
                               ),
-                        SizedBox(
+                        const SizedBox(
                           width: 30,
                         ),
                         homeProvider.visitTime2Used
@@ -580,7 +579,7 @@ class _TeamName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size.width * 0.20,
       child: TextField(
           textAlign: TextAlign.center,
@@ -596,7 +595,7 @@ class _TeamName extends StatelessWidget {
 }
 
 class _ScoreLeft extends StatefulWidget {
-  _ScoreLeft({
+  const _ScoreLeft({
     Key? key,
     required this.size,
     required this.homeProvider,
@@ -619,7 +618,7 @@ class _ScoreLeftState extends State<_ScoreLeft> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widget.size.width * 0.19,
       //height: widget.size.height * 0.60,
       child: Column(
@@ -656,7 +655,7 @@ class _ScoreLeftState extends State<_ScoreLeft> {
 }
 
 class _ScoreRight extends StatefulWidget {
-  _ScoreRight({
+  const _ScoreRight({
     Key? key,
     required this.size,
     required this.homeProvider,
@@ -679,7 +678,7 @@ class _ScoreRightState extends State<_ScoreRight> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widget.size.width * 0.19,
       child: Column(
         children: [

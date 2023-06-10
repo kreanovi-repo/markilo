@@ -4,7 +4,7 @@ import 'package:markilo/views/home/home_view.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  runApp(AppState());
+  runApp(const AppState());
 }
 
 class AppState extends StatelessWidget {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Markilo",
-      home: HomeView(
+      home: const HomeView(
         title: 'Markilo',
       ),
       theme: ThemeData.light().copyWith(
