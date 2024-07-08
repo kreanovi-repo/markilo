@@ -1,10 +1,11 @@
 import 'dart:html';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:markilo/providers/auth_provider.dart';
 import 'package:markilo/providers/home_provider.dart';
-import 'package:markilo/ui/inputs/custom_inputs.dart';
+import 'package:markilo/services/data_service.dart';
+import 'package:markilo/ui/shared/widgets/team_name.dart';
 import 'package:provider/provider.dart';
 
 enum Menu {
@@ -13,23 +14,28 @@ enum Menu {
   selectLocalEmblem,
   selectVisitEmblem,
   resetGame,
-  resetSets
+  resetSets,
+  toggleEmblems,
+  changeBackgroundColor
 }
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key, required this.title});
-  final String title;
+class DashboardVolleyView extends StatefulWidget {
+  const DashboardVolleyView({super.key, required this.authProvider});
+
+  final AuthProvider authProvider;
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<DashboardVolleyView> createState() => _DashboardVolleyViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _DashboardVolleyViewState extends State<DashboardVolleyView> {
   TextEditingController? _nameLeftcontroller;
   TextEditingController? _nameRightcontroller;
   late HomeProvider homeProvider;
   late Size size;
   bool appLoaded = false;
+
+  bool localEmblemLeft = true;
 
   refresh() {
     setState(() {});
@@ -44,6 +50,8 @@ class _HomeViewState extends State<HomeView> {
     homeProvider.localServe = true;
     _nameLeftcontroller = TextEditingController(text: '<Local>');
     _nameRightcontroller = TextEditingController(text: '<Visitante>');
+    homeProvider.localTeamName = TeamName(controller: _nameLeftcontroller);
+    homeProvider.visitTeamName = TeamName(controller: _nameRightcontroller);
   }
 
   @override
@@ -65,11 +73,13 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 30,
+    widget.authProvider.setNavBar(context, false);
+    return Column(children: [
+      AppBar(
+        toolbarHeight: 60,
         elevation: 0,
-        backgroundColor: const Color.fromARGB(255, 0, 173, 239),
+        backgroundColor:
+            homeProvider.stringToColor(DataService.user!.backgroundColorVoley),
         actions: [
           PopupMenuButton<Menu>(
               // Callback that sets the selected popup menu item.
@@ -116,6 +126,11 @@ class _HomeViewState extends State<HomeView> {
                 } else if (Menu.resetSets == item) {
                   homeProvider.resetSets();
                   refresh();
+                } else if (Menu.toggleEmblems == item) {
+                  localEmblemLeft = !localEmblemLeft;
+                  refresh();
+                } else if (Menu.changeBackgroundColor == item) {
+                  homeProvider.selectBackgroundColor(context, refresh);
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
@@ -192,6 +207,24 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     const PopupMenuItem<Menu>(
+                      value: Menu.toggleEmblems,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.toggle_on,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Invertir lado de equipos',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem<Menu>(
                       value: Menu.resetGame,
                       child: Row(
                         children: [
@@ -227,15 +260,34 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     ),
+                    const PopupMenuItem<Menu>(
+                      value: Menu.changeBackgroundColor,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.colorize_outlined,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Cambiar color de fondo',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
                   ]),
         ],
       ),
-      body: Center(
-          child: Container(
+      Container(
         width: size.width,
-        height: size.height,
-        color: const Color.fromARGB(255, 0, 173, 239),
+        height: size.height - 120,
+        color:
+            homeProvider.stringToColor(DataService.user!.backgroundColorVoley),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +300,9 @@ class _HomeViewState extends State<HomeView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _TeamName(size: size, controller: _nameLeftcontroller),
+                    localEmblemLeft
+                        ? homeProvider.localTeamName!
+                        : homeProvider.visitTeamName!,
                     GestureDetector(
                       onLongPress: () {
                         setState(() {
@@ -265,7 +319,9 @@ class _HomeViewState extends State<HomeView> {
                           }
                         });
                       },
-                      child: homeProvider.localEmblem,
+                      child: localEmblemLeft
+                          ? homeProvider.localEmblem
+                          : homeProvider.visitEmblem,
                     ),
                   ],
                 ),
@@ -307,7 +363,9 @@ class _HomeViewState extends State<HomeView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _TeamName(size: size, controller: _nameRightcontroller),
+                    localEmblemLeft
+                        ? homeProvider.visitTeamName!
+                        : homeProvider.localTeamName!,
                     GestureDetector(
                       onLongPress: () {
                         setState(() {
@@ -324,7 +382,9 @@ class _HomeViewState extends State<HomeView> {
                           }
                         });
                       },
-                      child: homeProvider.visitEmblem,
+                      child: localEmblemLeft
+                          ? homeProvider.visitEmblem
+                          : homeProvider.localEmblem,
                     ),
                   ],
                 ),
@@ -336,14 +396,14 @@ class _HomeViewState extends State<HomeView> {
             Row(
               children: [
                 SizedBox(
-                  width: size.width * 0.06,
+                  width: size.width * 0.04,
                 ),
                 Column(
                   children: [
                     Text(
                       'TIEMPOS',
                       style: GoogleFonts.montserrat(
-                        fontSize: size.width * 0.025,
+                        fontSize: size.width * 0.02,
                         color: Colors.black.withOpacity(0.7),
                         fontWeight: FontWeight.bold,
                       ),
@@ -359,7 +419,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_sharp,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               )
                             : GestureDetector(
@@ -370,7 +430,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_outlined,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               ),
                         const SizedBox(
@@ -385,7 +445,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_sharp,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               )
                             : GestureDetector(
@@ -396,7 +456,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_outlined,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               ),
                       ],
@@ -429,7 +489,7 @@ class _HomeViewState extends State<HomeView> {
                             child: Text(
                               homeProvider.setLeft.toString(),
                               style: GoogleFonts.oswald(
-                                  fontSize: size.width * 0.09,
+                                  fontSize: size.width * 0.08,
                                   color: Colors.black.withOpacity(0.7),
                                   fontWeight: FontWeight.bold),
                             ),
@@ -437,7 +497,7 @@ class _HomeViewState extends State<HomeView> {
                           Text(
                             " - ",
                             style: GoogleFonts.oswald(
-                                fontSize: size.width * 0.09,
+                                fontSize: size.width * 0.08,
                                 color: Colors.black.withOpacity(0.7),
                                 fontWeight: FontWeight.bold),
                           ),
@@ -457,7 +517,7 @@ class _HomeViewState extends State<HomeView> {
                             child: Text(
                               homeProvider.setRight.toString(),
                               style: GoogleFonts.oswald(
-                                  fontSize: size.width * 0.09,
+                                  fontSize: size.width * 0.08,
                                   color: Colors.black.withOpacity(0.7),
                                   fontWeight: FontWeight.bold),
                             ),
@@ -473,7 +533,7 @@ class _HomeViewState extends State<HomeView> {
                     Text(
                       'TIEMPOS',
                       style: GoogleFonts.montserrat(
-                        fontSize: size.width * 0.025,
+                        fontSize: size.width * 0.02,
                         color: Colors.black.withOpacity(0.7),
                         fontWeight: FontWeight.bold,
                       ),
@@ -489,7 +549,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_sharp,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               )
                             : GestureDetector(
@@ -500,7 +560,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_outlined,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               ),
                         const SizedBox(
@@ -515,7 +575,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_sharp,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               )
                             : GestureDetector(
@@ -526,7 +586,7 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Icon(
                                   Icons.circle_outlined,
-                                  size: size.width * 0.040,
+                                  size: size.width * 0.070,
                                 ),
                               ),
                       ],
@@ -534,73 +594,23 @@ class _HomeViewState extends State<HomeView> {
                   ],
                 ),
                 SizedBox(
-                  width: size.width * 0.06,
+                  width: size.width * 0.04,
                 )
               ],
             ),
           ],
         ),
-      )),
-    );
-  }
-}
-
-class ScoreSet extends StatelessWidget {
-  const ScoreSet({
-    Key? key,
-    required this.size,
-  }) : super(key: key);
-
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '25 - 22',
-      style: GoogleFonts.montserrat(
-        fontSize: size.width * 0.015,
-        color: Colors.black.withOpacity(0.7),
-        fontWeight: FontWeight.bold,
       ),
-    );
-  }
-}
-
-class _TeamName extends StatelessWidget {
-  const _TeamName({
-    Key? key,
-    required this.size,
-    required TextEditingController? controller,
-  })  : _controller = controller,
-        super(key: key);
-
-  final Size size;
-  final TextEditingController? _controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size.width * 0.20,
-      child: TextField(
-          textAlign: TextAlign.center,
-          controller: _controller,
-          style: GoogleFonts.oswald(
-            fontSize: size.width * 0.028,
-            color: Colors.black.withOpacity(0.7),
-            fontWeight: FontWeight.bold,
-          ),
-          decoration: CustomInputs.invisibleInput()),
-    );
+    ]);
   }
 }
 
 class _ScoreLeft extends StatefulWidget {
   const _ScoreLeft({
-    Key? key,
     required this.size,
     required this.homeProvider,
     required this.refresh,
-  }) : super(key: key);
+  });
 
   final Size size;
   final HomeProvider homeProvider;
@@ -656,11 +666,10 @@ class _ScoreLeftState extends State<_ScoreLeft> {
 
 class _ScoreRight extends StatefulWidget {
   const _ScoreRight({
-    Key? key,
     required this.size,
     required this.homeProvider,
     required this.refresh,
-  }) : super(key: key);
+  });
 
   final Size size;
   final HomeProvider homeProvider;
@@ -680,6 +689,7 @@ class _ScoreRightState extends State<_ScoreRight> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.size.width * 0.19,
+      //height: widget.size.height * 0.60,
       child: Column(
         children: [
           !widget.homeProvider.localServe
