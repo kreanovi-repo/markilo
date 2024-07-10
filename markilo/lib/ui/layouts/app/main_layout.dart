@@ -72,7 +72,7 @@ class _MainLayoutState extends State<MainLayout>
                       children: [
                         SizedBox(
                             width: double.infinity,
-                            height: MediaQuery.of(context).size.height - 60,
+                            height: MediaQuery.of(context).size.height,
                             child: widget.child)
                       ],
                     ),

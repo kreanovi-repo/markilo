@@ -6,21 +6,23 @@ class TeamName extends StatelessWidget {
   const TeamName({
     super.key,
     required TextEditingController? controller,
+    required this.color,
   }) : _controller = controller;
 
   final TextEditingController? _controller;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return SizedBox(
-      width: size.width * 0.20,
+      width: size.width * 0.35,
       child: TextField(
           textAlign: TextAlign.center,
           controller: _controller,
           style: GoogleFonts.oswald(
-            fontSize: size.width * 0.03,
-            color: Colors.black.withOpacity(0.8),
+            fontSize: size.width * 0.045,
+            color: color,
             fontWeight: FontWeight.bold,
           ),
           decoration: CustomInputs.invisibleInput()),

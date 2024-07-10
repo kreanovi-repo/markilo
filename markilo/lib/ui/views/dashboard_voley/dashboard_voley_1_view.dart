@@ -19,16 +19,16 @@ enum Menu {
   changeBackgroundColor
 }
 
-class DashboardVolleyView extends StatefulWidget {
-  const DashboardVolleyView({super.key, required this.authProvider});
+class DashboardVolley1View extends StatefulWidget {
+  const DashboardVolley1View({super.key, required this.authProvider});
 
   final AuthProvider authProvider;
 
   @override
-  State<DashboardVolleyView> createState() => _DashboardVolleyViewState();
+  State<DashboardVolley1View> createState() => _DashboardVolley1ViewState();
 }
 
-class _DashboardVolleyViewState extends State<DashboardVolleyView> {
+class _DashboardVolley1ViewState extends State<DashboardVolley1View> {
   TextEditingController? _nameLeftcontroller;
   TextEditingController? _nameRightcontroller;
   late HomeProvider homeProvider;
@@ -50,8 +50,12 @@ class _DashboardVolleyViewState extends State<DashboardVolleyView> {
     homeProvider.localServe = true;
     _nameLeftcontroller = TextEditingController(text: '<Local>');
     _nameRightcontroller = TextEditingController(text: '<Visitante>');
-    homeProvider.localTeamName = TeamName(controller: _nameLeftcontroller);
-    homeProvider.visitTeamName = TeamName(controller: _nameRightcontroller);
+    homeProvider.localTeamName = TeamName(
+      controller: _nameLeftcontroller,
+      color: Colors.black,
+    );
+    homeProvider.visitTeamName =
+        TeamName(controller: _nameRightcontroller, color: Colors.black);
   }
 
   @override
@@ -74,8 +78,11 @@ class _DashboardVolleyViewState extends State<DashboardVolleyView> {
   @override
   Widget build(BuildContext context) {
     widget.authProvider.setNavBar(context, false);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Column(children: [
-      AppBar(
+      /*AppBar(
         toolbarHeight: 60,
         elevation: 0,
         backgroundColor:
@@ -280,10 +287,10 @@ class _DashboardVolleyViewState extends State<DashboardVolleyView> {
                     ),
                   ]),
         ],
-      ),
+      ),*/
       Container(
         width: size.width,
-        height: size.height - 120,
+        height: size.height,
         color:
             homeProvider.stringToColor(DataService.user!.backgroundColorVoley),
         child: Column(
@@ -628,6 +635,7 @@ class _ScoreLeftState extends State<_ScoreLeft> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
       width: widget.size.width * 0.19,
       //height: widget.size.height * 0.60,
@@ -653,11 +661,15 @@ class _ScoreLeftState extends State<_ScoreLeft> {
                   height: widget.size.width * 0.050,
                   color: Colors.transparent,
                 ),
-          Text(widget.homeProvider.scoreLeft.toString(),
-              style: GoogleFonts.oswald(
-                  fontSize: widget.size.width * 0.15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold)),
+          Baseline(
+            baseline: screenHeight * 0.6,
+            baselineType: TextBaseline.alphabetic,
+            child: Text(widget.homeProvider.scoreLeft.toString(),
+                style: GoogleFonts.oswald(
+                    fontSize: widget.size.width * 0.3,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
+          ),
         ],
       ),
     );
@@ -687,6 +699,7 @@ class _ScoreRightState extends State<_ScoreRight> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
       width: widget.size.width * 0.19,
       //height: widget.size.height * 0.60,
@@ -711,11 +724,15 @@ class _ScoreRightState extends State<_ScoreRight> {
                   height: widget.size.width * 0.050,
                   color: Colors.transparent,
                 ),
-          Text(widget.homeProvider.scoreRight.toString(),
-              style: GoogleFonts.oswald(
-                  fontSize: widget.size.width * 0.15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold)),
+          Baseline(
+            baseline: screenHeight * 0.6,
+            baselineType: TextBaseline.alphabetic,
+            child: Text(widget.homeProvider.scoreRight.toString(),
+                style: GoogleFonts.oswald(
+                    fontSize: widget.size.width * 0.3,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
+          ),
         ],
       ),
     );
