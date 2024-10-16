@@ -30,8 +30,7 @@ class UserResource extends JsonResource
             'cell_phone' => $this->resource->cell_phone,
             'email' => $this->resource->email,
             'image' => $image,
-            'background_color_voley' => $this->resource->background_color_voley,
-            'voting_table' => $this->resource->voting_table,
+            'app_version' => $this->resource->app_version,
             'role' => RoleResource::make($this->resource->role),
         ];
     }

@@ -1,0 +1,7 @@
+models:
+  Api\v1\Configuracion\Configuracion:
+    app_version: string:10
+
+controllers:
+  Api\v1\Configuracion\Configuracion:
+    resource: api.store, api.update, api.show, api.index, api.destroy

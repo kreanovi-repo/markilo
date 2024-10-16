@@ -61,7 +61,7 @@ class _HomeViewState extends State<HomeView> {
           GestureDetector(
               onTap: () =>
                   NavigationService.replaceTo(Flurorouter.profileRoute),
-              child: const NavbarAvatar(size: 40)),
+              child: const NavbarAvatar(size: 60)),
         ],
       ),
     );

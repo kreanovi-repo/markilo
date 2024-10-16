@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ControlItem extends StatefulWidget {
   final String text;
   bool? value;
@@ -23,7 +24,7 @@ class _ControlItemState extends State<ControlItem> {
     super.initState();
     _valor = false;
     rebuildAllChildren(context);
-    print(_valor);
+    debugPrint(_valor.toString());
   }
 
   @override
@@ -38,7 +39,7 @@ class _ControlItemState extends State<ControlItem> {
             checkColor: Colors.white,
             fillColor: WidgetStateProperty.all(Colors.black),
             onChanged: (bool? value) => setState(() {
-                  print(value);
+                  debugPrint(value.toString());
                   _valor = value;
                   widget.onChanged(value);
                 })),

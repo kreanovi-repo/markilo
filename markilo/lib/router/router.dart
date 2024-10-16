@@ -15,11 +15,12 @@ class Flurorouter {
 
   // App Router
   static String homeRoute = '/home';
-  static String volleyDashboardRoute = '/volley_dashboard';
   static String profileRoute = '/profile';
   static String usersRoute = '/users';
   static String userRoute = '/dashboard/user';
   static String userRouteParamUid = '/:uid';
+
+  static String volleyDashboardRoute = '/volley_dashboard';
 
   static void configureRoutes() {
     // Root route

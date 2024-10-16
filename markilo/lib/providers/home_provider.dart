@@ -1,17 +1,21 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:markilo/providers/user_form_provider.dart';
-import 'package:markilo/services/data_service.dart';
-import 'package:markilo/services/notification_service.dart';
+import 'package:markilo/services/local_storage.dart';
+import 'package:markilo/types/constants.dart';
 import 'package:markilo/ui/shared/widgets/team_name.dart';
-import 'package:provider/provider.dart';
 
 class HomeProvider extends ChangeNotifier {
   bool localServe = true;
-  int scoreLeft = 0;
-  int scoreRight = 0;
-  int setLeft = 0;
-  int setRight = 0;
+  int _scoreLeft = 0;
+  int _scoreRight = 0;
+  int _setLeft = 0;
+  int _setRight = 0;
+
+  bool localEmblemLeft = true;
 
   bool localTime1Used = false;
   bool localTime2Used = false;
@@ -25,7 +29,13 @@ class HomeProvider extends ChangeNotifier {
   TeamName? localTeamName;
   TeamName? visitTeamName;
 
-  Color backgroundColorVoley = const Color.fromARGB(255, 0, 173, 239);
+  Color localBackgroundColor = Colors.red;
+  Color localTextColor = Colors.white;
+  Color visitBackgroundColor = Colors.black;
+  Color visitTextColor = Colors.white;
+
+  PlatformFile? localEmblemFile;
+  PlatformFile? visitEmblemFile;
 
   String colorToString(Color color) {
     return '#${color.value.toRadixString(16).padLeft(8, '0')}';
@@ -62,8 +72,8 @@ class HomeProvider extends ChangeNotifier {
 
   resetValues() {
     localServe = true;
-    scoreLeft = 0;
-    scoreRight = 0;
+    _scoreLeft = 0;
+    _scoreRight = 0;
     localTime1Used = false;
     localTime2Used = false;
     visitTime1Used = false;
@@ -72,47 +82,244 @@ class HomeProvider extends ChangeNotifier {
   }
 
   resetSets() {
-    setLeft = 0;
-    setRight = 0;
+    _setLeft = 0;
+    _setRight = 0;
     notifyListeners();
   }
 
-  void selectBackgroundColor(BuildContext context, Function updateWidget) {
-    showDialog(
+  int get scoreLeft => _scoreLeft;
+  int get scoreRight => _scoreRight;
+  int get setLeft => _setLeft;
+  int get setRight => _setRight;
+
+  set scoreLeft(int value) {
+    _scoreLeft = value;
+    notifyListeners();
+  }
+
+  set scoreRight(int value) {
+    _scoreRight = value;
+    notifyListeners();
+  }
+
+  set setLeft(int value) {
+    _setLeft = value;
+    notifyListeners();
+  }
+
+  set setRight(int value) {
+    _setRight = value;
+    notifyListeners();
+  }
+
+  incrementScoreLeft() {
+    ++_scoreLeft;
+    LocalStorage.prefs.setInt(Constants.scoreLeftValue, _scoreLeft);
+    notifyListeners();
+  }
+
+  decrementScoreLeft() {
+    if (_scoreLeft > 0) {
+      --_scoreLeft;
+      LocalStorage.prefs.setInt(Constants.scoreLeftValue, _scoreLeft);
+      notifyListeners();
+    }
+  }
+
+  incrementScoreRight() {
+    ++_scoreRight;
+    LocalStorage.prefs.setInt(Constants.scoreRightValue, _scoreRight);
+    notifyListeners();
+  }
+
+  decrementScoreRight() {
+    if (_scoreRight > 0) {
+      --_scoreRight;
+      LocalStorage.prefs.setInt(Constants.scoreRightValue, _scoreRight);
+      notifyListeners();
+    }
+  }
+
+  incrementSetLeft() {
+    ++_setLeft;
+    LocalStorage.prefs.setInt(Constants.setLeftValue, _setLeft);
+    notifyListeners();
+  }
+
+  decrementSetLeft() {
+    if (_setLeft > 0) {
+      --_setLeft;
+      LocalStorage.prefs.setInt(Constants.setLeftValue, _setLeft);
+      notifyListeners();
+    }
+  }
+
+  incrementSetRight() {
+    ++_setRight;
+    LocalStorage.prefs.setInt(Constants.setRightValue, _setRight);
+    notifyListeners();
+  }
+
+  decrementSetRight() {
+    if (_setRight > 0) {
+      --_setRight;
+      LocalStorage.prefs.setInt(Constants.setRightValue, _setRight);
+      notifyListeners();
+    }
+  }
+
+  saveLocalTeamName(String localTeamName) {
+    LocalStorage.prefs.setString(Constants.localTeamNameValue, localTeamName);
+    notifyListeners();
+  }
+
+  saveVisitTeamName(String visitTeamName) {
+    LocalStorage.prefs.setString(Constants.visitTeamNameValue, visitTeamName);
+    notifyListeners();
+  }
+
+  Future<void> showColorPickerDialog(
+      BuildContext context, bool localSelect) async {
+    PlatformFile? tempEmblemFile = localEmblemFile;
+    Color tempBackgroundColor = localBackgroundColor;
+    Color tempTextColor = localTextColor;
+    if (!localSelect) {
+      tempBackgroundColor = visitBackgroundColor;
+      tempTextColor = visitTextColor;
+      tempEmblemFile = visitEmblemFile;
+    }
+
+    await showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
-          title: const Text('Color de fondo - Tablero de voley'),
+          title: const Text('Configuración de colores'),
           content: SingleChildScrollView(
-            child: BlockPicker(
-              pickerColor: backgroundColorVoley,
-              onColorChanged: (Color color) {
-                backgroundColorVoley = color;
-                updateWidget();
-              },
+            child: Column(
+              children: [
+                const Text('Color de fondo'),
+                ColorPicker(
+                  pickerColor: tempBackgroundColor,
+                  onColorChanged: (color) {
+                    tempBackgroundColor = color;
+                  },
+                  enableAlpha: false,
+                  pickerAreaHeightPercent: 0.25,
+                  displayThumbColor: true,
+                ),
+                const SizedBox(height: 10),
+                const Text('Color del texto'),
+                ColorPicker(
+                  pickerColor: tempTextColor,
+                  onColorChanged: (color) {
+                    tempTextColor = color;
+                  },
+                  enableAlpha: false,
+                  pickerAreaHeightPercent: 0.25,
+                  displayThumbColor: true,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        const Text('Seleccione el escudo'),
+                        ElevatedButton(
+                          onPressed: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              type: FileType.image,
+                            );
+                            if (result != null) {
+                              tempEmblemFile = result.files.first;
+                            }
+                          },
+                          child: const Text('Seleccionar escudo'),
+                        ),
+                      ],
+                    ),
+                    tempEmblemFile != null
+                        ? Image.memory(
+                            tempEmblemFile!.bytes!,
+                            width: 100,
+                            height: 100,
+                          )
+                        : Image.asset(
+                            'assets/images/escudo_negro.png',
+                            width: 100,
+                            height: 100,
+                          ),
+                  ],
+                ),
+              ],
             ),
           ),
-          actions: <Widget>[
-            ElevatedButton(
-              child: const Text('Aplicar'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
               onPressed: () async {
-                UserFormProvider userFormProvider =
-                    Provider.of<UserFormProvider>(context, listen: false);
-                DataService.user!.backgroundColorVoley =
-                    colorToString(backgroundColorVoley);
-                final saved =
-                    await userFormProvider.updateUser(DataService.user!);
-                if (saved) {
-                  Navigator.of(context).pop();
+                if (localSelect) {
+                  localBackgroundColor = tempBackgroundColor;
+                  localTextColor = tempTextColor;
+                  localEmblemFile = tempEmblemFile;
+                  await saveConfigurationLocalToStorage(
+                      tempEmblemFile!, localBackgroundColor, localTextColor);
                 } else {
-                  NotificationService.showSnackbarError(
-                      'El color de fondo no pudo ser cambiado');
+                  visitBackgroundColor = tempBackgroundColor;
+                  visitTextColor = tempTextColor;
+                  visitEmblemFile = tempEmblemFile;
+                }
+                if (context.mounted) {
+                  Navigator.of(context).pop();
                 }
               },
+              child: const Text('Aplicar'),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> saveConfigurationLocalToStorage(PlatformFile platformFile,
+      Color localBackgroundColor, Color localTextColor) async {
+    await LocalStorage.prefs
+        .setString(Constants.teamLocalLogo, base64Encode(platformFile.bytes!));
+    await LocalStorage.prefs.setString(Constants.teamLocalBackgroundColor,
+        localBackgroundColor.value.toRadixString(16));
+    await LocalStorage.prefs.setString(
+        Constants.teamLocalTextColor, localTextColor.value.toRadixString(16));
+  }
+
+  Future<Uint8List?> loadImageFromLocalStorage() async {
+    String? base64Image = LocalStorage.prefs.getString(Constants.teamLocalLogo);
+    if (base64Image != null) {
+      Uint8List imageBytes = base64Decode(base64Image);
+      return imageBytes;
+    }
+    return null;
+  }
+
+  Future<Color?> loadBackgroundColorFromLocalStorage() async {
+    String? backgroundColor =
+        LocalStorage.prefs.getString(Constants.teamLocalBackgroundColor);
+    if (backgroundColor != null) {
+      return Color(int.parse(backgroundColor, radix: 16));
+    }
+    return null;
+  }
+
+  Future<Color?> loadTextColorFromLocalStorage() async {
+    String? textColor =
+        LocalStorage.prefs.getString(Constants.teamLocalTextColor);
+    if (textColor != null) {
+      return Color(int.parse(textColor, radix: 16));
+    }
+    return null;
   }
 }

@@ -31,8 +31,8 @@ class UserUpdateRequest extends FormRequest
             'dni' => ['required', 'numeric'],
             'cell_phone' => ['required', 'string'],
             'email' => ['required', 'email'],
-            'image' => ['required', 'string'],
-            'background_color_voley' => ['required', 'string'],
+            'image' => ['string'],
+            'app_version' => ['required', 'string'],
         ];
     }
 

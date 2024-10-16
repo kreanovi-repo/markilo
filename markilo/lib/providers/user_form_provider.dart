@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:markilo/api/surikato_api.dart';
+import 'package:markilo/api/markilo_api.dart';
 import 'package:flutter/material.dart';
 import 'package:markilo/models/user.dart';
 
@@ -9,7 +9,7 @@ class UserFormProvider extends ChangeNotifier {
   late GlobalKey<FormState> formKey;
   bool updating = false;
 
-  bool _validateForm() {
+  bool validateForm() {
     return formKey.currentState!.validate();
   }
 
@@ -26,13 +26,13 @@ class UserFormProvider extends ChangeNotifier {
       'dni': user.dni,
       'cell_phone': user.cellPhone,
       'email': user.email,
-      'image': user.image,
-      'background_color_voley': user.backgroundColorVoley,
+      //'image': user.image,
+      'app_version': user.appVersion
     };
 
     try {
       final response =
-          await SurikatoApi.httpPost("/user/update/${user!.id}", data);
+          await MarkiloApi.httpPost("/user/update/${user.id}", data);
       if (200 == response.statusCode) {
         updating = false;
         notifyListeners();
@@ -40,7 +40,7 @@ class UserFormProvider extends ChangeNotifier {
       }
       return false;
     } catch (e) {
-      print('error en updateUser: $e');
+      debugPrint('error en updateUser: $e');
       updating = false;
       notifyListeners();
       return false;
@@ -49,7 +49,7 @@ class UserFormProvider extends ChangeNotifier {
 
   Future<User> uploadImage(String path, Uint8List bytes) async {
     try {
-      await SurikatoApi.uploadFile(path, bytes).then((response) {
+      await MarkiloApi.uploadFile(path, bytes).then((response) {
         if (200 == response.statusCode) {
           user = User.fromJson(response.data);
           notifyListeners();
@@ -58,7 +58,7 @@ class UserFormProvider extends ChangeNotifier {
 
       return user!;
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       throw ('Error al actualizar la imagen');
     }
   }

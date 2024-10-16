@@ -13,7 +13,7 @@ class SplashLayout extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: const Image(
-                image: AssetImage('assets/images/logo.png'),
+                image: AssetImage('assets/images/logo_negro.png'),
                 width: 300,
               ),
             ),

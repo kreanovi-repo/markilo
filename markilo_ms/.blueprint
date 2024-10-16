@@ -1,0 +1,16 @@
+created:
+    - app/Http/Controllers/Api/v1/Configuracion/ConfiguracionController.php
+    - database/factories/Api/v1/Configuracion/ConfiguracionFactory.php
+    - database/migrations/2024_07_26_205730_create_configuracions_table.php
+    - app/Models/Api/v1/Configuracion/Configuracion.php
+    - tests/Feature/Http/Controllers/Api/v1/Configuracion/ConfiguracionControllerTest.php
+    - app/Http/Requests/Api\v1\Configuracion/ConfiguracionStoreRequest.php
+    - app/Http/Requests/Api\v1\Configuracion/ConfiguracionUpdateRequest.php
+    - app/Http/Resources/Api\v1\Configuracion/ConfiguracionCollection.php
+    - app/Http/Resources/Api\v1\Configuracion/ConfiguracionResource.php
+updated:
+    - routes/api.php
+models:
+    Api\v1\Auth\Role: {  }
+    Api\v1\Auth\User: { uuid: 'string:36', name: 'string:50', surname: 'string:50', email: string, dni: 'string:20', cell_phone: 'string:20', email_verified_at: 'datetime nullable', password: string, image: string, remember_token: 'string:100 nullable' }
+    Api\v1\Configuracion\Configuracion: { app_version: 'string:10' }

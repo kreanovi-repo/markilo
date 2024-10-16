@@ -11,7 +11,7 @@ class NavbarAvatar extends StatelessWidget {
       child: SizedBox(
         height: size,
         width: size,
-        child: Image.asset('assets/images/logo.png'),
+        child: Image.asset('assets/images/logo_blanco.png'),
       ),
     );
   }

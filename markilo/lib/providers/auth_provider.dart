@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:markilo/api/surikato_api.dart';
+import 'package:markilo/api/markilo_api.dart';
 import 'package:markilo/models/http/auth_response.dart';
 import 'package:markilo/models/user.dart';
 
@@ -46,10 +46,12 @@ class AuthProvider extends ChangeNotifier {
 
       _loadingLogin = true;
       notifyListeners();
-      final response = await SurikatoApi.httpPost('/user/login', data);
+      final response = await MarkiloApi.httpPost('/user/login', data);
       if (202 == response.statusCode) {
         final authResponse = AuthResponse.fromMap(response.data);
-        showForceLogoutDialog(context, authResponse);
+        if (context.mounted) {
+          showForceLogoutDialog(context, authResponse);
+        }
         _loadingLogin = false;
         notifyListeners();
       } else if (200 == response.statusCode) {
@@ -58,7 +60,7 @@ class AuthProvider extends ChangeNotifier {
         DataService.user = user;
         authStatus = AuthStatus.authenticated;
         LocalStorage.prefs.setString('token', authResponse.accessToken);
-        SurikatoApi.configureDio();
+        MarkiloApi.configureDio();
         _loadingLogin = false;
         loadData();
         notifyListeners();
@@ -66,7 +68,7 @@ class AuthProvider extends ChangeNotifier {
           NavigationService.replaceTo(Flurorouter.homeRoute);
         });
       }
-    } on Exception catch (e) {
+    } on Exception {
       NotificationService.showSnackbarError('Usuario o contraseña inválida');
       _loadingLogin = false;
       notifyListeners();
@@ -76,7 +78,7 @@ class AuthProvider extends ChangeNotifier {
   logout() {
     _loadingLogin = true;
     notifyListeners();
-    SurikatoApi.httpPost('/user/logout', null).then((response) {
+    MarkiloApi.httpPost('/user/logout', null).then((response) {
       _loadingLogin = false;
       if (200 == response.statusCode) {
         user = null;
@@ -106,7 +108,7 @@ class AuthProvider extends ChangeNotifier {
       'role_id': '2'
     };
 
-    SurikatoApi.httpPost('/user', data).then((response) {
+    MarkiloApi.httpPost('/user', data).then((response) {
       if (200 == response.statusCode) {
         final authResponse = AuthResponse.fromMap(response.data);
         user = authResponse.user;
@@ -131,7 +133,7 @@ class AuthProvider extends ChangeNotifier {
     authStatus = AuthStatus.checking;
     final token = LocalStorage.prefs.getString('token');
     if (null != token) {
-      await SurikatoApi.httpGet('/user/is-authenticated').then((response) {
+      await MarkiloApi.httpGet('/user/is-authenticated').then((response) {
         if (200 == response.statusCode) {
           final authResponse = AuthResponse.fromMap(response.data);
           user = authResponse.user;
@@ -160,7 +162,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> isAlive() async {
-    await SurikatoApi.httpGet('/user/is-authenticated').then((response) {
+    await MarkiloApi.httpGet('/user/is-authenticated').then((response) {
       if (200 == response.statusCode) {
         noAuthenticatedRetry = 0;
         return true;
@@ -256,7 +258,7 @@ class AuthProvider extends ChangeNotifier {
                           backgroundColor: Colors.teal,
                           foregroundColor: Colors.white,
                           onPressed: () async {
-                            await SurikatoApi.httpPost(
+                            await MarkiloApi.httpPost(
                                 "/user/delete/token/${authResponse.accessToken}",
                                 null);
                             if (context.mounted) {

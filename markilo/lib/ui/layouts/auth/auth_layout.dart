@@ -1,4 +1,4 @@
-import 'package:markilo/types/Constants.dart';
+import 'package:markilo/types/constants.dart';
 import 'package:markilo/ui/layouts/auth/widgets/auth_background.dart';
 import 'package:markilo/ui/layouts/auth/widgets/custom_title.dart';
 import 'package:flutter/material.dart';

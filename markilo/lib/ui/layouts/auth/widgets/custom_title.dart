@@ -11,7 +11,7 @@ class CustomTitle extends StatelessWidget {
           height: 30,
         ),
         Image.asset(
-          'assets/images/logo.png',
+          'assets/images/logo_blanco.png',
           width: 250,
           height: 100,
         ),

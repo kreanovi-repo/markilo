@@ -21,6 +21,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get ('user-by-uuid/{uuid}', [App\Http\Controllers\Api\v1\Auth\UserController::class, 'showByUuid']);
     Route::get ('user-email-exists/{email}', [App\Http\Controllers\Api\v1\Auth\UserController::class, 'emailExists']);
     Route::post('user/logout', [App\Http\Controllers\Api\v1\Auth\UserController::class, 'logout']);
+
+    Route::apiResource('configuration', App\Http\Controllers\Api\v1\Configuracion\ConfiguracionController::class);
 });
 
 //API route for login user

@@ -3,7 +3,7 @@ import 'package:markilo/providers/auth_provider.dart';
 import 'package:markilo/providers/sidemenu_provider.dart';
 import 'package:markilo/router/router.dart';
 import 'package:markilo/services/navigation_service.dart';
-import 'package:markilo/types/Constants.dart';
+import 'package:markilo/types/constants.dart';
 import 'package:markilo/ui/shared/widgets/logo.dart';
 import 'package:markilo/ui/shared/widgets/menu_item.dart';
 import 'package:markilo/ui/shared/widgets/text_separator.dart';

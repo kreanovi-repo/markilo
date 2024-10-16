@@ -1,12 +1,15 @@
 import 'dart:async';
-
+import 'package:markilo/providers/user_form_provider.dart';
+import 'package:universal_html/html.dart' as html;
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:markilo/models/configuration/configuration.dart';
 import 'package:markilo/providers/auth_provider.dart';
-import 'package:markilo/providers/home_provider.dart';
+import 'package:markilo/providers/configuration/configurations_provider.dart';
 import 'package:markilo/providers/sidemenu_provider.dart';
 import 'package:markilo/services/data_service.dart';
 import 'package:markilo/services/notification_service.dart';
+import 'package:markilo/ui/layouts/splash/splash_layout.dart';
 import 'package:markilo/ui/shared/sidebar.dart';
 import 'package:provider/provider.dart';
 
@@ -23,10 +26,18 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout>
     with SingleTickerProviderStateMixin {
+  late ConfigurationsProvider configurationsProvider;
+  bool loaded = false;
+  String? newAppVersion;
+  Configuration? configuration;
+
   @override
   void initState() {
     super.initState();
+    configurationsProvider =
+        Provider.of<ConfigurationsProvider>(context, listen: false);
     BackButtonInterceptor.add(backButtonInterceptor);
+
     Timer.periodic(
       const Duration(seconds: 20),
       (timer) async {
@@ -44,6 +55,27 @@ class _MainLayoutState extends State<MainLayout>
     );
   }
 
+  Future<bool> getDataProviders(BuildContext context) async {
+    if (!loaded) {
+      loaded = true;
+      await configurationsProvider.getConfiguration();
+    }
+    return true;
+  }
+
+  @override
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    await checkForUpdateOnLoad();
+  }
+
+  Future<void> checkForUpdateOnLoad() async {
+    configuration = await configurationsProvider.getConfiguration();
+    if (configuration != null) {
+      await checkForUpdate(configuration!);
+    }
+  }
+
   @override
   void dispose() {
     BackButtonInterceptor.remove(backButtonInterceptor);
@@ -55,30 +87,77 @@ class _MainLayoutState extends State<MainLayout>
     return true;
   }
 
+  Future<void> checkForUpdate(Configuration configuration) async {
+    try {
+      if (DataService.user!.appVersion != configuration.appVersion) {
+        setState(() {
+          newAppVersion = configuration.appVersion;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error fetching version: $e");
+    }
+  }
+
+  Future<void> updateVersion() async {
+    UserFormProvider userFormProvider = Provider.of(context, listen: false);
+    DataService.user!.appVersion = configuration!.appVersion;
+    await userFormProvider.updateUser(DataService.user!);
+    html.window.location.reload();
+  }
+
   @override
   Widget build(BuildContext context) {
-    HomeProvider homeProvider = Provider.of<HomeProvider>(context);
-    return Overlay(
-      initialEntries: [
-        OverlayEntry(
-            builder: (context) => Scaffold(
+    return FutureBuilder<bool>(
+        future: getDataProviders(context),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (!snapshot.hasData) {
+            return const SplashLayout();
+          } else {
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return Scaffold(
                 key: SideMenuProvider.scaffoldKey,
-                backgroundColor: homeProvider
-                    .stringToColor(DataService.user!.backgroundColorVoley),
+                backgroundColor: Colors.blue[700],
                 drawer: const Drawer(width: 200, child: Sidebar()),
                 body: Stack(
                   children: [
                     Column(
                       children: [
+                        if (newAppVersion != null)
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            color: Colors.orange[700],
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '¡Nueva versión disponible ($newAppVersion)!',
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                                TextButton(
+                                  onPressed: updateVersion,
+                                  child: const Text(
+                                    'Actualizar',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         SizedBox(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height,
-                            child: widget.child)
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height,
+                          child: widget.child,
+                        ),
                       ],
                     ),
                   ],
-                ))),
-      ],
-    );
+                ),
+              );
+            }
+          }
+        });
   }
 }

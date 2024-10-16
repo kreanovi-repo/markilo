@@ -15,7 +15,7 @@ class LinksBar extends StatelessWidget {
         children: [
           LinkText(
             text: 'Sobre',
-            onPressed: () => print('Sobre'),
+            onPressed: () => debugPrint('Sobre'),
           ),
           const LinkText(text: 'Ayuda'),
           const LinkText(text: 'Términos y condiciones'),

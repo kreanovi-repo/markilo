@@ -25,7 +25,7 @@ class User extends Authenticatable
         'cell_phone',
         'password',
         'image',
-        'background_color_voley'
+        'app_version'
     ];
 
     /**

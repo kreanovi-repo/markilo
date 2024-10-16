@@ -1,6 +1,5 @@
 import 'package:markilo/services/data_service.dart';
-import 'package:markilo/ui/views/dashboard_voley/dashboard_voley_1_view.dart';
-import 'package:markilo/ui/views/dashboard_voley/dashboard_voley_2_view.dart';
+import 'package:markilo/ui/views/dashboard_voley/dashboard_voley_view.dart';
 import 'package:markilo/ui/views/user_view.dart';
 import 'package:markilo/ui/views/users_view.dart';
 import 'package:fluro/fluro.dart';
@@ -69,9 +68,6 @@ class AppHandlers {
         .setCurrentPageUrl(Flurorouter.volleyDashboardRoute);
     if (AuthStatus.authenticated == authProvider.authStatus) {
       DataService.showNavBar = false;
-      /*return DashboardVolley1View(
-        authProvider: authProvider,
-      );*/
       return const DashboardVoley2View();
     } else {
       return const LoginView();

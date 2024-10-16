@@ -19,7 +19,7 @@ class AuthBackground extends StatelessWidget {
                     height: 250,
                   ),
                   Image(
-                    image: AssetImage('assets/images/logo.png'),
+                    image: AssetImage('assets/images/logo_negro.png'),
                     width: 400,
                   ),
                 ],

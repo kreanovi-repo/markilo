@@ -5,19 +5,17 @@ class WaitPlease extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        Container(
-          child: const Text(
-            "Aguarde por favor . . .",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white),
-          ),
+        Text(
+          "Aguarde por favor . . .",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white),
         ),
-        const SizedBox(
+        SizedBox(
           height: 20,
         ),
-        const SizedBox(
+        SizedBox(
           height: 50,
           width: 50,
           child: CircularProgressIndicator(),

@@ -30,12 +30,10 @@ class ControlItemTitle extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Container(
-          child: Text(
-            title,
-            style: CustomLabels.h2,
-            maxLines: 2,
-          ),
+        Text(
+          title,
+          style: CustomLabels.h2,
+          maxLines: 2,
         )
       ],
     );

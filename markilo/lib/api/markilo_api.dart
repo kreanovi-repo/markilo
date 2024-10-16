@@ -6,7 +6,7 @@ import 'package:markilo/services/data_service.dart';
 import 'package:markilo/services/local_storage.dart';
 import 'package:flutter/material.dart';
 
-class SurikatoApi {
+class MarkiloApi {
   static Dio dio = Dio();
 
   static void configureDio() {

@@ -10,7 +10,7 @@ class User {
     required this.cellPhone,
     required this.email,
     this.image,
-    required this.backgroundColorVoley,
+    required this.appVersion,
   });
 
   int id;
@@ -21,7 +21,7 @@ class User {
   String cellPhone;
   String email;
   String? image;
-  String backgroundColorVoley;
+  String appVersion;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -34,6 +34,6 @@ class User {
         image: json["image"] == null
             ? null
             : '${DataService.configuration!['baseUrl']!}/${json["image"]}',
-        backgroundColorVoley: json["background_color_voley"],
+        appVersion: json["app_version"],
       );
 }

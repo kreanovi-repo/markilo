@@ -1,0 +1,30 @@
+- Ejecutar: laravel new <nombre proyecto>  (Crea el proyecto)
+- Abrir proyecto en PhpStorn y abrir terminal
+- Ejecutar: composer require laravel-shift/blueprint --dev
+- Ejecutar: php artisan vendor:publish
+- Luego elegimos el archivo blueprint-config
+- Abrir el archivo blueprint dento de la carpeta config
+- Modificar el namesapce de los models (models_namespace) poniendo el nombre Models
+- Modificar use_constrains a true para que nos agrege las constrains de las llaves foraneas en la DB
+- Modificar use_guarded a true para que en los modelos nos cree un array vacio llamado guarded
+- Ejecutar: php artisan blueprint:new
+- Abrimos el archivo draft.yaml en la raiz del proyecto. Dentro de este archivo se crean los modelos
+- Crear los modelos dentro del archivo draft.yaml
+- Ejecutar: php artisan blueprint:build
+- Configurar la base de datos
+- Ejecutar: php artisan migrate
+- Ejecutar: php artisan stub:publish
+- Abrir el archivo stub/test.stub
+- Agregamos use RefreshDatabase; en class {{ class }} extends TestCase
+- Borramos la linea use Illuminate\Foundation\Testing\WithFaker;
+- Cambiamos @return void @test
+- Cambiamos el nombre testExample por it_can_test
+- Borro el contenido del text y lo reemplazo por //
+
+- Eliminar los test que trae por defecto laravel
+- Ejecutar: php artisan make:test Articles/ListArticlesTest
+
+- Archivos a tener en cuenta:
+1. Resources: <model>Resoruce.php y <model>Collection.php
+2. tests/MakesJsonApiRequests.php (trait para enviar los headers)
+3. AppServiceProvider -> Registrar macro

@@ -29,7 +29,7 @@ class ProfileView extends StatelessWidget {
           ],
         ),
         Image.asset(
-          'assets/images/logo.png',
+          'assets/images/logo_blanco.png',
           width: 250,
         ),
         const SizedBox(

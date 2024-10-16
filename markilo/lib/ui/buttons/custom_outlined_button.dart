@@ -4,9 +4,9 @@ class CustomOutlinedButton extends StatelessWidget {
   final Function onPressed;
   final String text;
   final Color color;
-  final hPadding;
-  final vPadding;
-  final fontSize;
+  final double hPadding;
+  final double vPadding;
+  final double fontSize;
   final bool isFilled;
 
   const CustomOutlinedButton(

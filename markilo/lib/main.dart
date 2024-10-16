@@ -1,7 +1,8 @@
+import 'package:markilo/providers/configuration/configurations_provider.dart';
 import 'package:markilo/providers/user_form_provider.dart';
 import 'package:markilo/providers/users_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:markilo/api/surikato_api.dart';
+import 'package:markilo/api/markilo_api.dart';
 import 'package:markilo/providers/auth_provider.dart';
 import 'package:markilo/providers/home_provider.dart';
 import 'package:markilo/providers/sidemenu_provider.dart';
@@ -26,7 +27,7 @@ void main() async {
     languagesList: <String>['es', 'en'],
     assetsDirectory: 'assets/lang/',
   );
-  SurikatoApi.configureDio();
+  MarkiloApi.configureDio();
   Flurorouter.configureRoutes();
   runApp(Phoenix(child: const AppState()));
 }
@@ -42,7 +43,8 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(lazy: false, create: (_) => SideMenuProvider()),
         ChangeNotifierProvider(lazy: false, create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => UsersProvider()),
-        ChangeNotifierProvider(create: (_) => UserFormProvider())
+        ChangeNotifierProvider(create: (_) => UserFormProvider()),
+        ChangeNotifierProvider(create: (_) => ConfigurationsProvider())
       ],
       child: const LocalizedApp(child: MarkiloApp()),
     );
@@ -84,8 +86,8 @@ class MarkiloApp extends StatelessWidget {
         }
       },
       theme: ThemeData.light().copyWith(
-          scrollbarTheme: const ScrollbarThemeData().copyWith(
-              thumbColor: WidgetStateProperty.all(Colors.grey[500]))),
+          scrollbarTheme: const ScrollbarThemeData()
+              .copyWith(thumbColor: WidgetStateProperty.all(Colors.grey[500]))),
     );
   }
 }

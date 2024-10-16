@@ -27,7 +27,6 @@ class _UserViewState extends State<UserView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
     final userFormProvider =
@@ -44,7 +43,7 @@ class _UserViewState extends State<UserView> {
         NavigationService.replaceTo('/dashboard/users');
       }
     });
-    print(widget.uuid);
+    debugPrint(widget.uuid);
   }
 
   @override
@@ -54,28 +53,26 @@ class _UserViewState extends State<UserView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        physics: const ClampingScrollPhysics(),
-        children: [
-          Text(
-            'Usuario',
-            style: CustomLabels.h1,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          if (null == user)
-            WhiteCard(
-              child: Container(
-                alignment: Alignment.center,
-                height: 300,
-                child: const CircularProgressIndicator(),
-              ),
+    return ListView(
+      physics: const ClampingScrollPhysics(),
+      children: [
+        Text(
+          'Usuario',
+          style: CustomLabels.h1,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        if (null == user)
+          WhiteCard(
+            child: Container(
+              alignment: Alignment.center,
+              height: 300,
+              child: const CircularProgressIndicator(),
             ),
-          if (null != user) const _UserViewBody()
-        ],
-      ),
+          ),
+        if (null != user) const _UserViewBody()
+      ],
     );
   }
 }
@@ -85,19 +82,17 @@ class _UserViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Table(
-        columnWidths: const {0: FixedColumnWidth(250)},
-        children: const [
-          TableRow(children: [
-            // Avatar
-            _AvatarContainer(),
+    return Table(
+      columnWidths: const {0: FixedColumnWidth(250)},
+      children: const [
+        TableRow(children: [
+          // Avatar
+          _AvatarContainer(),
 
-            // Formulario
-            _UserViewForm()
-          ])
-        ],
-      ),
+          // Formulario
+          _UserViewForm()
+        ])
+      ],
     );
   }
 }
@@ -178,11 +173,11 @@ class _UserViewForm extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const _cancelButton(),
+                    const CancelButton(),
                     const SizedBox(
                       width: 5,
                     ),
-                    _saveButton(userFormProvider: userFormProvider, user: user),
+                    SaveButton(userFormProvider: userFormProvider, user: user),
                   ],
                 )
               ],
@@ -190,8 +185,9 @@ class _UserViewForm extends StatelessWidget {
   }
 }
 
-class _saveButton extends StatelessWidget {
-  const _saveButton({
+class SaveButton extends StatelessWidget {
+  const SaveButton({
+    super.key,
     required this.userFormProvider,
     required this.user,
   });
@@ -208,8 +204,10 @@ class _saveButton extends StatelessWidget {
             final saved = await userFormProvider.updateUser(DataService.user!);
             if (saved) {
               NotificationService.showSnackbar('Usuario actualizado');
-              Provider.of<UsersProvider>(context, listen: false)
-                  .refreshUser(user);
+              if (context.mounted) {
+                Provider.of<UsersProvider>(context, listen: false)
+                    .refreshUser(user);
+              }
               NavigationService.replaceTo(Flurorouter.usersRoute);
             } else {
               NotificationService.showSnackbarError(
@@ -245,8 +243,8 @@ class _saveButton extends StatelessWidget {
   }
 }
 
-class _cancelButton extends StatelessWidget {
-  const _cancelButton();
+class CancelButton extends StatelessWidget {
+  const CancelButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -331,21 +329,22 @@ class _AvatarContainer extends StatelessWidget {
                                     allowedExtensions: ['png']);
                             if (result != null) {
                               PlatformFile file = result.files.first;
-                              /*print(file.name);
-                              print(file.bytes);
-                              print(file.size);
-                              print(file.extension);
-                              print(file.path);*/
-                              NotificationService.showBusyIndicator(context);
+                              if (context.mounted) {
+                                NotificationService.showBusyIndicator(context);
+                              }
                               final updatedUser =
                                   await userFormProvider.uploadImage(
                                       '/user/upload-image/${user.uuid}',
                                       file.bytes!);
                               user.image = updatedUser.image;
-                              //print("new user image ${user.image}");
-                              Provider.of<UsersProvider>(context, listen: false)
-                                  .refreshUser(user);
-                              Navigator.of(context).pop();
+                              if (context.mounted) {
+                                Provider.of<UsersProvider>(context,
+                                        listen: false)
+                                    .refreshUser(user);
+                              }
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
                             } else {
                               // User canceled the picker
                             }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:markilo/api/surikato_api.dart';
+import 'package:markilo/api/markilo_api.dart';
 import 'package:markilo/models/http/users_response.dart';
 import 'package:markilo/models/user.dart';
 
@@ -15,8 +15,8 @@ class UsersProvider extends ChangeNotifier {
 
   getUsers() async {
     loading = true;
-    final response = await SurikatoApi.httpGet('/user');
-    print(response.data);
+    final response = await MarkiloApi.httpGet('/user');
+    debugPrint(response.data.toString());
     final usersResponse = UsersResponse.fromMap(response.data);
     users = [...usersResponse.users];
     loading = false;
@@ -25,12 +25,12 @@ class UsersProvider extends ChangeNotifier {
 
   Future<User?> getUserByUuid(String uuid) async {
     try {
-      final response = await SurikatoApi.httpGet("/user-by-uuid/$uuid");
+      final response = await MarkiloApi.httpGet("/user-by-uuid/$uuid");
       //print(response.data);
       final user = User.fromJson(response.data);
       return user;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return null;
     }
   }
