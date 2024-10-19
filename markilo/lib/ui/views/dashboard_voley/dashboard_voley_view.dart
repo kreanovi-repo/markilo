@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:markilo/models/configuration/team/team_configuration.dart';
 import 'package:markilo/providers/home_provider.dart';
 import 'package:markilo/router/router.dart';
 import 'package:markilo/services/local_storage.dart';
@@ -36,8 +37,8 @@ class DashboardVoley2ViewState extends State<DashboardVoley2View> {
   void initState() {
     super.initState();
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    _nameLeftcontroller = TextEditingController(text: '<Local>');
-    _nameRightcontroller = TextEditingController(text: '<Visitante>');
+    _nameLeftcontroller = TextEditingController(text: '<LOCAL>');
+    _nameRightcontroller = TextEditingController(text: '<VISITANTE>');
     leftTimeCircles = TimeCircles(
         circles: leftCircles,
         backgroundColor: homeProvider.localBackgroundColor,
@@ -52,7 +53,8 @@ class DashboardVoley2ViewState extends State<DashboardVoley2View> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     size = MediaQuery.of(context).size;
-    Uint8List? localEmblem = await homeProvider.loadImageFromLocalStorage();
+    /*Uint8List? localEmblem =
+        await homeProvider.loadImageLocalTeamFromLocalStorage();
     if (null != localEmblem) {
       homeProvider.localEmblemFile = PlatformFile(
         name: 'local_emblem.png',
@@ -70,6 +72,22 @@ class DashboardVoley2ViewState extends State<DashboardVoley2View> {
     Color? textColor = await homeProvider.loadTextColorFromLocalStorage();
     if (null != textColor) {
       homeProvider.localTextColor = textColor;
+    }*/
+
+    TeamConfiguration? localConfig =
+        await homeProvider.loadConfigurationFromStorage(true);
+    if (null != localConfig) {
+      homeProvider.localEmblemFile = localConfig.platformFile;
+      homeProvider.localBackgroundColor = localConfig.backgroundColor;
+      homeProvider.localTextColor = localConfig.textColor;
+    }
+
+    TeamConfiguration? visitConfig =
+        await homeProvider.loadConfigurationFromStorage(false);
+    if (null != visitConfig) {
+      homeProvider.visitEmblemFile = visitConfig.platformFile;
+      homeProvider.visitBackgroundColor = visitConfig.backgroundColor;
+      homeProvider.visitTextColor = visitConfig.textColor;
     }
 
     int? scoreLeft = LocalStorage.prefs.getInt(Constants.scoreLeftValue);

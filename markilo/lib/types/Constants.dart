@@ -6,6 +6,10 @@ class Constants {
   static String teamLocalBackgroundColor = 'team_local_background_color';
   static String teamLocalTextColor = 'team_local_text_color';
 
+  static String teamVisitLogo = 'team_visit_logo';
+  static String teamVisitBackgroundColor = 'team_visit_background_color';
+  static String teamVisitTextColor = 'team_visit_text_color';
+
   static String scoreLeftValue = 'score_left_value';
   static String scoreRightValue = 'score_right_value';
   static String setLeftValue = 'set_left_value';

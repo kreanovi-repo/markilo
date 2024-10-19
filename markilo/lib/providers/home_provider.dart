@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:markilo/models/configuration/team/team_configuration.dart';
 import 'package:markilo/services/local_storage.dart';
 import 'package:markilo/types/constants.dart';
 import 'package:markilo/ui/shared/widgets/team_name.dart';
@@ -267,12 +268,22 @@ class HomeProvider extends ChangeNotifier {
                   localBackgroundColor = tempBackgroundColor;
                   localTextColor = tempTextColor;
                   localEmblemFile = tempEmblemFile;
-                  await saveConfigurationLocalToStorage(
-                      tempEmblemFile!, localBackgroundColor, localTextColor);
+                  final config = TeamConfiguration(
+                    platformFile: tempEmblemFile!,
+                    backgroundColor: localBackgroundColor,
+                    textColor: localTextColor,
+                  );
+                  await saveConfigurationLocalToStorage(config, true);
                 } else {
                   visitBackgroundColor = tempBackgroundColor;
                   visitTextColor = tempTextColor;
                   visitEmblemFile = tempEmblemFile;
+                  final config = TeamConfiguration(
+                    platformFile: visitEmblemFile!,
+                    backgroundColor: visitBackgroundColor,
+                    textColor: visitTextColor,
+                  );
+                  await saveConfigurationLocalToStorage(config, false);
                 }
                 if (context.mounted) {
                   Navigator.of(context).pop();
@@ -286,17 +297,53 @@ class HomeProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> saveConfigurationLocalToStorage(PlatformFile platformFile,
-      Color localBackgroundColor, Color localTextColor) async {
-    await LocalStorage.prefs
-        .setString(Constants.teamLocalLogo, base64Encode(platformFile.bytes!));
-    await LocalStorage.prefs.setString(Constants.teamLocalBackgroundColor,
-        localBackgroundColor.value.toRadixString(16));
-    await LocalStorage.prefs.setString(
-        Constants.teamLocalTextColor, localTextColor.value.toRadixString(16));
+  Future<void> saveConfigurationLocalToStorage(
+      TeamConfiguration config, bool localTeam) async {
+    final configMap = config.toJson();
+
+    if (localTeam) {
+      await LocalStorage.prefs
+          .setString(Constants.teamLocalLogo, configMap['logo']!);
+      await LocalStorage.prefs.setString(
+          Constants.teamLocalBackgroundColor, configMap['backgroundColor']!);
+      await LocalStorage.prefs
+          .setString(Constants.teamLocalTextColor, configMap['textColor']!);
+    } else {
+      await LocalStorage.prefs
+          .setString(Constants.teamVisitLogo, configMap['logo']!);
+      await LocalStorage.prefs.setString(
+          Constants.teamVisitBackgroundColor, configMap['backgroundColor']!);
+      await LocalStorage.prefs
+          .setString(Constants.teamVisitTextColor, configMap['textColor']!);
+    }
   }
 
-  Future<Uint8List?> loadImageFromLocalStorage() async {
+  Future<TeamConfiguration?> loadConfigurationFromStorage(
+      bool localTeam) async {
+    String? logo = LocalStorage.prefs.getString(Constants.teamLocalLogo);
+    String? backgroundColor =
+        LocalStorage.prefs.getString(Constants.teamLocalBackgroundColor);
+    String? textColor =
+        LocalStorage.prefs.getString(Constants.teamLocalTextColor);
+
+    if (!localTeam) {
+      logo = LocalStorage.prefs.getString(Constants.teamVisitLogo);
+      backgroundColor =
+          LocalStorage.prefs.getString(Constants.teamVisitBackgroundColor);
+      textColor = LocalStorage.prefs.getString(Constants.teamVisitTextColor);
+    }
+
+    if (logo != null && backgroundColor != null && textColor != null) {
+      return TeamConfiguration.fromJson({
+        'logo': logo,
+        'backgroundColor': backgroundColor,
+        'textColor': textColor,
+      });
+    }
+    return null; // Si no hay configuración guardada
+  }
+
+  /*Future<Uint8List?> loadImageLocalTeamFromLocalStorage() async {
     String? base64Image = LocalStorage.prefs.getString(Constants.teamLocalLogo);
     if (base64Image != null) {
       Uint8List imageBytes = base64Decode(base64Image);
@@ -321,5 +368,5 @@ class HomeProvider extends ChangeNotifier {
       return Color(int.parse(textColor, radix: 16));
     }
     return null;
-  }
+  }*/
 }

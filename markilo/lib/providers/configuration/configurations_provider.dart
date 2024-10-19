@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:markilo/api/markilo_api.dart';
-import 'package:markilo/models/configuration/configuration.dart';
+import 'package:markilo/models/configuration/configuration/configuration.dart';
 
 class ConfigurationsProvider extends ChangeNotifier {
   Future<Configuration?> getConfiguration() async {

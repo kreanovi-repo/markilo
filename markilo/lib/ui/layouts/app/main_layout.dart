@@ -3,7 +3,7 @@ import 'package:markilo/providers/user_form_provider.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
-import 'package:markilo/models/configuration/configuration.dart';
+import 'package:markilo/models/configuration/configuration/configuration.dart';
 import 'package:markilo/providers/auth_provider.dart';
 import 'package:markilo/providers/configuration/configurations_provider.dart';
 import 'package:markilo/providers/sidemenu_provider.dart';
