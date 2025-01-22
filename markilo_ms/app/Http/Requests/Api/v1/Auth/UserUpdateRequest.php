@@ -28,11 +28,11 @@ class UserUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'surname' => ['required', 'string'],
-            'dni' => ['required', 'numeric'],
-            'cell_phone' => ['required', 'string'],
             'email' => ['required', 'email'],
+            'role_id' => ['integer'],
             'image' => ['string'],
-            'app_version' => ['required', 'string'],
+            'app_tce_version' => ['required', 'string'],
+            'state' => ['required', 'integer'],
         ];
     }
 

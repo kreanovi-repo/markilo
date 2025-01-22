@@ -18,34 +18,52 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Markilo.">
+  <meta name="description" content="T.C.E. - Montecor.">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="markilo">
+  <meta name="apple-mobile-web-app-title" content="tce">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <meta name="app-version" content="VERSION_POR_REEMPLAZAR">
 
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+  <meta http-equiv="Expires" content="0" />  
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
   <title>Markilo</title>
-  <link rel="manifest" href="manifest.json">  
-
-  <!-- This script adds the flutter initialization JS code -->
-  <script defer src="main.dart.js?v=1.8.0"></script>  
-  <script defer src="flutter.js?v=1.8.0"></script>  
-
+  <link rel="manifest" href="manifest.json">
+  
   <script type="text/javascript">    
     window.flutterWebRenderer = "html";
   </script>
+
+  <style>
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .indicator{
+      width: 25vw;
+    }
+  </style>
+  
 </head>
-<body>
-  <video id="videoElement" style="display:none;" autoplay></video>
-  <script defer src="flutter_bootstrap.js"></script>
+<body>       
+	  <!-- Script de arranque de Flutter -->
+    <script src="flutter_bootstrap.js" async></script>
+	
+    <div id="loading_indicator" class="container">
+      <img class="indicator" src="./assets/splash.png" />    
+    </div>  
 </body>
 </html>

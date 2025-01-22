@@ -67,7 +67,6 @@ class MarkiloApp extends StatelessWidget {
       supportedLocales: translator.locals(),
       title: "MARKILO",
       builder: (_, child) {
-        //print(LocalStorage.prefs.getString('token'));
         translator.setNewLanguage(context, newLanguage: 'es', remember: true);
         final authProvider = Provider.of<AuthProvider>(context);
         if (AuthStatus.checking == authProvider.authStatus) {
