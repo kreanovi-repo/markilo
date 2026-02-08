@@ -105,7 +105,7 @@ class Sidebar extends StatelessWidget {
     );
   }
 
-  toggleDrawer() async {
+  Future<void> toggleDrawer() async {
     if (SideMenuProvider.scaffoldKey.currentState!.isDrawerOpen) {
       SideMenuProvider.scaffoldKey.currentState!.closeDrawer();
     } else {

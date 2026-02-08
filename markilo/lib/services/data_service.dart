@@ -16,9 +16,10 @@ class DataService {
   //////////////////////////////////////////
   ///           PUBLIC METHODS           ///
   //////////////////////////////////////////
-  static getConfiguration() async {
-    final String data =
-        await rootBundle.loadString('assets/configuration/configuration.json');
+  static Future<void> getConfiguration() async {
+    final String data = await rootBundle.loadString(
+      'assets/configuration/configuration.json',
+    );
     configuration = Map.from(json.decode(data));
   }
 }

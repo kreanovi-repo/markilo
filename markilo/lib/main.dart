@@ -1,4 +1,5 @@
 import 'package:markilo/providers/configuration/configurations_provider.dart';
+import 'package:markilo/providers/paddle/paddle_provider.dart';
 import 'package:markilo/providers/user_form_provider.dart';
 import 'package:markilo/providers/users_provider.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +43,10 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(lazy: false, create: (_) => AuthProvider()),
         ChangeNotifierProvider(lazy: false, create: (_) => SideMenuProvider()),
         ChangeNotifierProvider(lazy: false, create: (_) => HomeProvider()),
+        ChangeNotifierProvider(lazy: false, create: (_) => PaddleProvider()),
         ChangeNotifierProvider(create: (_) => UsersProvider()),
         ChangeNotifierProvider(create: (_) => UserFormProvider()),
-        ChangeNotifierProvider(create: (_) => ConfigurationsProvider())
+        ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
       ],
       child: const LocalizedApp(child: MarkiloApp()),
     );
@@ -70,23 +72,20 @@ class MarkiloApp extends StatelessWidget {
         translator.setNewLanguage(context, newLanguage: 'es', remember: true);
         final authProvider = Provider.of<AuthProvider>(context);
         if (AuthStatus.checking == authProvider.authStatus) {
-          return const Center(
-            child: SplashLayout(),
-          );
+          return const Center(child: SplashLayout());
         }
 
         if (AuthStatus.authenticated == authProvider.authStatus) {
-          return MainLayout(
-            authProvider: authProvider,
-            child: child!,
-          );
+          return MainLayout(authProvider: authProvider, child: child!);
         } else {
           return AuthLayout(child: child!);
         }
       },
       theme: ThemeData.light().copyWith(
-          scrollbarTheme: const ScrollbarThemeData()
-              .copyWith(thumbColor: WidgetStateProperty.all(Colors.grey[500]))),
+        scrollbarTheme: const ScrollbarThemeData().copyWith(
+          thumbColor: WidgetStateProperty.all(Colors.grey[500]),
+        ),
+      ),
     );
   }
 }

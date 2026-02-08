@@ -13,7 +13,7 @@ class UsersProvider extends ChangeNotifier {
     getUsers();
   }
 
-  getUsers() async {
+  Future<void> getUsers() async {
     loading = true;
     final response = await MarkiloApi.httpGet('/user');
     debugPrint(response.data.toString());

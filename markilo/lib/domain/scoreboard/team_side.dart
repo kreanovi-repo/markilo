@@ -1,0 +1,4 @@
+enum TeamSide {
+  local,
+  visit,
+}

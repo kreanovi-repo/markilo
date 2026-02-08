@@ -1,0 +1,24 @@
+﻿Analyzing markilo...                                            
+
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g, or toARGB32 for an explicit conversion - lib\models\configuration\team\team_configuration.dart:20:42 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g, or toARGB32 for an explicit conversion - lib\models\configuration\team\team_configuration.dart:21:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\services\notification_service.dart:9:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\services\notification_service.dart:18:44 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g, or toARGB32 for an explicit conversion - lib\services\scoreboard\scoreboard_prefs.dart:181:29 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g, or toARGB32 for an explicit conversion - lib\services\scoreboard\scoreboard_prefs.dart:186:23 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\buttons\custom_outlined_button.dart:30:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\buttons\custom_outlined_cancel_button.dart:24:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\cards\white_card.dart:52:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\inputs\custom_inputs.dart:17:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\inputs\custom_inputs.dart:19:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\shared\widgets\menu_item.dart:27:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\shared\widgets\menu_item.dart:49:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\shared\widgets\menu_item.dart:57:59 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\shared\widgets\text_separator.dart:17:31 - deprecated_member_use
+  error - The method 'initialize' isn't defined for the type 'PaddleProvider' - lib\ui\views\dashboard_paddle\dashboard_paddle_view.dart:34:15 - undefined_method
+  error - The getter 'serveOnRight' isn't defined for the type 'PaddleProvider' - lib\ui\views\dashboard_paddle\dashboard_paddle_view.dart:156:27 - undefined_getter
+  error - The method 'initialize' isn't defined for the type 'HomeProvider' - lib\ui\views\dashboard_voley\dashboard_voley_view.dart:35:22 - undefined_method
+  error - The getter 'serveOnRight' isn't defined for the type 'HomeProvider' - lib\ui\views\dashboard_voley\dashboard_voley_view.dart:164:27 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\views\user_view.dart:219:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\ui\views\user_view.dart:259:54 - deprecated_member_use
+

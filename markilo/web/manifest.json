@@ -1,12 +1,12 @@
 {
-    "name": "Markilo",
-    "short_name": "Markilo",
+    "name": "markilo",
+    "short_name": "markilo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Markilo.",
-    "orientation": "landscape-primary",
+    "description": "A new Flutter project.",
+    "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {

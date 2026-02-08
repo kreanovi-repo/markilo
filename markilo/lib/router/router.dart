@@ -21,29 +21,57 @@ class Flurorouter {
   static String userRouteParamUid = '/:uid';
 
   static String volleyDashboardRoute = '/volley_dashboard';
+  static String paddleDashboardRoute = '/paddle_dashboard';
+  static String bochasDashboardRoute = '/bochas_dashboard';
 
   static void configureRoutes() {
     // Root route
-    router.define(rootRoute,
-        handler: AuthHandlers.login, transitionType: TransitionType.none);
+    router.define(
+      rootRoute,
+      handler: AuthHandlers.login,
+      transitionType: TransitionType.none,
+    );
 
     // Auth routes
-    router.define(loginRoute,
-        handler: AuthHandlers.login, transitionType: TransitionType.none);
+    router.define(
+      loginRoute,
+      handler: AuthHandlers.login,
+      transitionType: TransitionType.none,
+    );
 
     // App routes
-    router.define(homeRoute,
-        handler: AppHandlers.home, transitionType: TransitionType.fadeIn);
-    router.define(profileRoute,
-        handler: AppHandlers.profile, transitionType: TransitionType.fadeIn);
-    router.define(usersRoute,
-        handler: AppHandlers.users, transitionType: TransitionType.fadeIn);
-    router.define(userRoute + userRouteParamUid,
-        handler: AppHandlers.user, transitionType: TransitionType.fadeIn);
+    router.define(
+      homeRoute,
+      handler: AppHandlers.home,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      profileRoute,
+      handler: AppHandlers.profile,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      usersRoute,
+      handler: AppHandlers.users,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      userRoute + userRouteParamUid,
+      handler: AppHandlers.user,
+      transitionType: TransitionType.fadeIn,
+    );
 
-    router.define(volleyDashboardRoute,
-        handler: AppHandlers.volleyDashboard,
-        transitionType: TransitionType.fadeIn);
+    router.define(
+      volleyDashboardRoute,
+      handler: AppHandlers.volleyDashboard,
+      transitionType: TransitionType.fadeIn,
+    );
+
+    router.define(
+      paddleDashboardRoute,
+      handler: AppHandlers.paddleDashboard,
+      transitionType: TransitionType.fadeIn,
+    );
 
     // 404
     router.notFoundHandler = NoPageFoundHandlers.noPageFound;

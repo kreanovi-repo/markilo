@@ -37,7 +37,7 @@ class AuthProvider extends ChangeNotifier {
     isAuthenticated();
   }
 
-  login(BuildContext context, String email, String password) async {
+  Future<void> login(BuildContext context, String email, String password) async {
     try {
       final data = {
         "email": email,
@@ -75,7 +75,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  logout() {
+  void logout() {
     _loadingLogin = true;
     notifyListeners();
     MarkiloApi.httpPost('/user/logout', null).then((response) {
@@ -99,7 +99,7 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
-  register(String email, String password, String name, String surname) {
+  void register(String email, String password, String name, String surname) {
     final data = {
       "name": name,
       "surname": surname,
@@ -206,11 +206,11 @@ class AuthProvider extends ChangeNotifier {
     );
   }
 
-  loadData() async {
+  Future<void> loadData() async {
     DataService.appLoaded = true;
   }
 
-  showForceLogoutDialog(BuildContext context, AuthResponse authResponse) {
+  void showForceLogoutDialog(BuildContext context, AuthResponse authResponse) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -289,7 +289,7 @@ class AuthProvider extends ChangeNotifier {
         });
   }
 
-  showUserDisconnected(BuildContext context) {
+  void showUserDisconnected(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {

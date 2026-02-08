@@ -4,7 +4,7 @@ class NotificationService {
   static final GlobalKey<ScaffoldMessengerState> messengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  static showSnackbarError(String message) {
+  static void showSnackbarError(String message) {
     final snackBar = SnackBar(
         backgroundColor: Colors.red.withOpacity(0.9),
         content:
@@ -13,7 +13,7 @@ class NotificationService {
     messengerKey.currentState!.showSnackBar(snackBar);
   }
 
-  static showSnackbar(String message) {
+  static void showSnackbar(String message) {
     final snackBar = SnackBar(
         backgroundColor: Colors.blueAccent.withOpacity(0.9),
         content:
@@ -22,7 +22,7 @@ class NotificationService {
     messengerKey.currentState!.showSnackBar(snackBar);
   }
 
-  static showBusyIndicator(BuildContext context) {
+  static void showBusyIndicator(BuildContext context) {
     const AlertDialog dialog = AlertDialog(
       content: SizedBox(
         width: 100,

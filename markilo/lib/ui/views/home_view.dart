@@ -28,13 +28,32 @@ class _HomeViewState extends State<HomeView> {
         Center(
           child: Padding(
             padding: EdgeInsets.only(top: size.height * 0.3),
-            child: HomeShortcut(
-                title: 'Tablero de Voley',
-                iconImage: 'assets/images/voley.png',
-                route: Flurorouter.volleyDashboardRoute,
-                subTitle: 'Ver tablero'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                HomeShortcut(
+                  title: 'Tablero de Voley',
+                  iconImage: 'assets/images/voley.png',
+                  route: Flurorouter.volleyDashboardRoute,
+                  subTitle: 'Ver tablero',
+                ),
+                HomeShortcut(
+                  title: 'Tablero de Paddle',
+                  iconImage: 'assets/images/paddle.png',
+                  route: Flurorouter.paddleDashboardRoute,
+                  subTitle: 'Ver tablero',
+                ),
+                HomeShortcut(
+                  title: 'Tablero de Bochas',
+                  iconImage: 'assets/images/bochas.png',
+                  route: Flurorouter.bochasDashboardRoute,
+                  subTitle: 'Ver tablero',
+                ),
+              ],
+            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -52,16 +71,12 @@ class _HomeViewState extends State<HomeView> {
               "Hola ${authProvider.user!.name}!",
               style: CustomLabels.h4.copyWith(color: Colors.white),
             ),
-          const SizedBox(
-            width: 5,
-          ),
-          const SizedBox(
-            width: 5,
-          ),
+          const SizedBox(width: 5),
+          const SizedBox(width: 5),
           GestureDetector(
-              onTap: () =>
-                  NavigationService.replaceTo(Flurorouter.profileRoute),
-              child: const NavbarAvatar(size: 60)),
+            onTap: () => NavigationService.replaceTo(Flurorouter.profileRoute),
+            child: const NavbarAvatar(size: 60),
+          ),
         ],
       ),
     );
